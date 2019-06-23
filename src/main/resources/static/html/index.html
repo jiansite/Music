@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>Music</title>
-  <link rel="stylesheet" href="static/layui/css/layui.css">
-  <link rel="shortcut icon" href="static/img/favicon.ico">
-  <script type="text/javascript" src="static/jquery/jquery-3.4.1.min.js"></script>
+  <link rel="stylesheet" href="/static/layui/css/layui.css">
+  <link rel="shortcut icon" href="/static/img/favicon.ico">
+  <script type="text/javascript" src="/static/jquery/jquery-3.4.1.min.js"></script>
   <style type="text/css">
     .layui-form-pane .layui-form-radio, .layui-form-pane .layui-form-switch {
       margin-top: 0rem;
@@ -48,7 +48,7 @@
     <ul class="layui-nav layui-layout-right">
       <li class="layui-nav-item">
         <a href="javascript:;">
-          <img src="static/img/Jester.jpg" class="layui-nav-img">
+          <img src="/static/img/Jester.jpg" class="layui-nav-img">
           <span>Jester</span>
         </a>
         <dl class="layui-nav-child">
@@ -90,7 +90,8 @@
   <div class="layui-body">
     <!-- 内容主体区域 -->
     <div style="padding: 15px;">
-      <iframe id="option" name="option" src="static\html\musicList.html" style="overflow: visible;" scrolling="no" frameborder="no" width="100%" height="100%"></iframe>
+<!--      <iframe id="option" name="option" src="static\html\musicList.html" style="overflow: visible;" scrolling="no" frameborder="no" width="100%" height="100%"></iframe>-->
+      <iframe id="option" name="option" src="/static/html/musicList.html" style="overflow: visible;" scrolling="no" frameborder="no" width="100%" height="100%"></iframe>
     </div>
   </div>
   
@@ -107,13 +108,13 @@
 
 <!--搜索区域开始-->
 <div style="display: none;margin: 1.16rem auto; " id="search">
-  <form id="Info" class="layui-form layui-form-pane" action="">
+  <form id="Info" class="layui-form layui-form-pane" onsubmit='return false'>
       <div class="layui-input-block" style="margin-left: 1.18rem;float: left; position: relative;">
-        <input style="width: 15.6rem;" type="text" id="select_orderId" name="select_orderId" lay-verify="required" placeholder="搜索歌手、歌名、专辑" autocomplete="off" class="layui-input">
+        <input style="width: 15.6rem;" type="text" id="name" name="name" lay-verify="required" placeholder="搜索歌手、歌名、专辑" autocomplete="off" class="layui-input">
       </div>
       <button class="layui-btn" lay-submit="" id="searchBtn" data-type="getInfo" style="float: left;">搜索</button>
 
-    <div class="layui-input-block" style="margin-left: 1.18rem;float: left; position: relative;">
+    <div class="layui-input-block" style="margin-left: 1.18rem;float: left; position: relative;" id="source">
       <input type="radio" name="source" style="margin: 0rem 0rem" value="netease" title="网易云" checked="">
       <input type="radio" name="source" style="margin: 0rem 0rem" value="tencent" title="QQ">
       <input type="radio" name="source" style="margin: 0rem 0rem" value="xiami" title="虾米">
@@ -124,7 +125,7 @@
 </div>
 <!--搜索区域结束-->
 
-<script src="static/layui/layui.js"></script>
+<script src="/static/layui/layui.js"></script>
 <script>
 //JavaScript代码区域
 layui.use('element', function(){
@@ -152,6 +153,56 @@ layui.use('form',function(){
   var form = layui.form;
   //刷新界面 所有元素
   form.render();
+});
+
+$("#searchBtn").click(function () {
+  var name=$("#name").val();
+  if(name==null || name==""){
+    layer.msg('必选项不能为空', {icon: 5});
+    return false;
+  }
+    var parms={
+    name:$("#name").val(),
+    types:"search",
+    source: $('#source input[name="source"]:checked ').val(),
+    pages:1,
+    count:20
+  };
+  $.ajax({
+    type : 'post',
+    url : '/app/open/search',
+    timeout : 4000,
+    dataType : 'json',
+    data :parms,
+    success:function(result){
+      data=result;
+      if(result.code==200){
+        layer.msg(result.data);
+        var data=result.result.data;
+        //展示已知数据
+        layui.use('table', function(){
+          var table = layui.table;
+          table.render({
+            elem: '#musicInfo'
+            ,cols: [[ //标题栏
+              {field: 'id', title: 'ID', width: 80, sort: true}
+              ,{field: 'name', title: '歌曲名', width: 120}
+              ,{field: 'album', title: '唱片集', minWidth: 150}
+              ,{field: 'artist', title: '艺术家', minWidth: 160}
+            ]]
+            ,data: data
+            //,skin: 'line' //表格风格
+            ,even: true
+            //,page: true //是否显示分页
+            //,limits: [5, 7, 10]
+            //,limit: 5 //每页默认显示的数量
+          });
+        });
+      }else{
+        layer.msg(result);
+      }
+    }
+  });
 });
 
 function ONOFF() {

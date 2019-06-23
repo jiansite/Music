@@ -2,7 +2,6 @@ package com.jester.music.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @className: IndexController
@@ -16,8 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class IndexController {
 
     @RequestMapping({"/","/index"})
-    public String index(ModelAndView modelAndView) {
-
-        return "index";
+    public String index() {
+        return "static/html/index";
     }
 }

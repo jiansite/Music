@@ -1,5 +1,6 @@
 package com.jester.music.utils;
 
+import com.alibaba.fastjson.JSONArray;
 import lombok.Data;
 import lombok.ToString;
 import lombok.NoArgsConstructor;
@@ -37,6 +38,12 @@ public class Result {
         this.result.put(DEFAULT_KEY, value);
     }
 
+    public Result(int code, String msg, JSONArray value) {
+        this.code = code;
+        this.msg = msg;
+        this.result.put(DEFAULT_KEY, value);
+    }
+
     public Result(int code, String msg, String key, Object value) {
         this.code = code;
         this.msg = msg;
@@ -60,6 +67,10 @@ public class Result {
     }
 
     public static Result success(Object result) {
+        return new Result(Status.SUCCESS.code, Status.SUCCESS.msg, result);
+    }
+
+    public static Result success(JSONArray result) {
         return new Result(Status.SUCCESS.code, Status.SUCCESS.msg, result);
     }
 

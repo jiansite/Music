@@ -9,6 +9,4 @@ package com.jester.music.config;
  * @version: version 1.0.0
  */
 public class ConfigConst {
-    //签名密钥
-    public static final String KEY = "dhtchwubtdiwhdyiwgsyu2539vsuhwu";
 }

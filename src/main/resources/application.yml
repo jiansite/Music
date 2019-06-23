@@ -10,7 +10,7 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/points?useUnicode=true&characterEncoding=UTF-8&useSSL=false
     username: root
     password: root
-    driverClassName : com.mysql.jdbc.Driver
+    driverClassName : com.mysql.cj.jdbc.Driver
 
   thymeleaf:
     cache: false
