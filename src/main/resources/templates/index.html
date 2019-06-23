@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Music</title>
+  <link rel="stylesheet" href="static/layui/css/layui.css">
+  <link rel="shortcut icon" href="static/img/favicon.ico">
+  <script type="text/javascript" src="static/jquery/jquery-3.4.1.min.js"></script>
+  <style type="text/css">
+    .layui-form-pane .layui-form-radio, .layui-form-pane .layui-form-switch {
+      margin-top: 0rem;
+      margin-left: 0rem;
+    }
+    .layui-form-radio {
+      line-height: 28px;
+      margin: 0rem 0rem;
+      padding-right: 0rem;
+      cursor: pointer;
+      font-size: 0;
+    }
+    .layui-input-block {
+      min-height: 45px;
+    }
+  </style>
+  <audio id="music" controls="controls" hidden="hidden"  loop="loop">
+    <source src="http://other.web.nc01.sycdn.kuwo.cn/resource/n1/77/64/3873453051.mp3" type="audio/mpeg"  volumevalue="0.1">
+  </audio>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">Music</div>
+    <!-- 头部区域（可配合layui已有的水平导航） -->
+    <ul class="layui-nav layui-layout-left">
+      <li class="layui-nav-item"><a href="">正在播放</a></li>
+      <li class="layui-nav-item"><a href="">播放列表</a></li>
+      <li class="layui-nav-item"><a href="javaScript:search()">歌曲搜索</a></li>
+      <!--<li class="layui-nav-item">
+        <a href="javascript:;">其它系统</a>
+        <dl class="layui-nav-child">
+          <dd><a href="">邮件管理</a></dd>
+          <dd><a href="">消息管理</a></dd>
+          <dd><a href="">授权管理</a></dd>
+        </dl>
+      </li>-->
+    </ul>
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <img src="static/img/Jester.jpg" class="layui-nav-img">
+          <span>Jester</span>
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="">基本资料</a></dd>
+          <dd><a href="">安全设置</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="">退出</a></li>
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <!--<li class="layui-nav-item layui-nav-itemed">-->
+        <li class="layui-nav-item">
+          <a class="" href="javascript:;">我的音乐</a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;">我喜欢的音乐</a></dd>
+            <dd><a href="javascript:;">我的云音乐</a></dd>
+            <dd><a href="javascript:;">我的收藏</a></dd>
+            <dd><a href="">本地音乐</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item">
+          <a href="javascript:;">创建的歌单</a>
+          <dl class="layui-nav-child">
+            <dd><a href="javascript:;">列表一</a></dd>
+            <dd><a href="javascript:;">列表二</a></dd>
+            <dd><a href="">列表三</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item"><a href="">发现音乐</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+      <iframe id="option" name="option" src="static\html\musicList.html" style="overflow: visible;" scrolling="no" frameborder="no" width="100%" height="100%"></iframe>
+    </div>
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    <!--<a href="javaScript:layer.msg('假的,baby ^_^');">© www.jester.com</a>-->
+    <div class="layui-logo" style="margin-left: 80%">
+      <h3>
+        <a href="javaScript:" onclick="ONOFF()" ><i class="layui-icon" style="font-size: 25px; color: green;width:20px; height:20px; " id="icon" >&#xe6fc;</i></a>
+      </h3>
+    </div>
+  </div>
+</div>
+
+<!--搜索区域开始-->
+<div style="display: none;margin: 1.16rem auto; " id="search">
+  <form id="Info" class="layui-form layui-form-pane" action="">
+      <div class="layui-input-block" style="margin-left: 1.18rem;float: left; position: relative;">
+        <input style="width: 15.6rem;" type="text" id="select_orderId" name="select_orderId" lay-verify="required" placeholder="搜索歌手、歌名、专辑" autocomplete="off" class="layui-input">
+      </div>
+      <button class="layui-btn" lay-submit="" id="searchBtn" data-type="getInfo" style="float: left;">搜索</button>
+
+    <div class="layui-input-block" style="margin-left: 1.18rem;float: left; position: relative;">
+      <input type="radio" name="source" style="margin: 0rem 0rem" value="netease" title="网易云" checked="">
+      <input type="radio" name="source" style="margin: 0rem 0rem" value="tencent" title="QQ">
+      <input type="radio" name="source" style="margin: 0rem 0rem" value="xiami" title="虾米">
+      <input type="radio" name="source" style="margin: 0rem 0rem" value="kugou" title="酷狗">
+      <input type="radio" name="source" style="margin: 0rem 0rem" value="baidu" title="百度">
+    </div>
+  </form>
+</div>
+<!--搜索区域结束-->
+
+<script src="static/layui/layui.js"></script>
+<script>
+//JavaScript代码区域
+layui.use('element', function(){
+  var element = layui.element;
+  
+});
+
+layui.use('layer', function(){
+  var layer = layui.layer;
+});
+
+//页面层-自定义
+function search() {
+  layer.open({
+    title: false,
+    type: 1,
+    area: ['22rem', '6.8rem'],
+    offset:'6rem',
+    shade:0,
+    content: $('#search') //id
+  });
+}
+
+layui.use('form',function(){
+  var form = layui.form;
+  //刷新界面 所有元素
+  form.render();
+});
+
+function ONOFF() {
+  if(music.paused){
+    $("#icon").html("&#xe651;");
+    music.play();
+  }else{
+    $("#icon").html("&#xe652;");
+    music.pause();
+  }
+};
+</script>
+</body>
+</html>
