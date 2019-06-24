@@ -16,36 +16,36 @@
     <i onclick="getMusic('{{d.source}}','{{d.id}}','{{d.pic_id}}','{{d.lyric_id}}','{{d.url_id}}')" class="layui-icon layui-icon-headset" style="font-size: 1.6rem; color: #1E9FFF;"></i>
 </script>
 <script>
-    layui.use('table', function(){
-        var table = layui.table;
+layui.use('table', function(){
+    var table = layui.table;
 
-        table.render({
-            elem: '#musicInfo'
-            ,url:'../../app/open/search?types=search&count=20&source=netease&pages=1&name=别知己'
-            ,toolbar: true
-            ,title: '用户数据表'
-            ,totalRow: true
-            ,cols: [[
-                {field:'SerialNumber', width:80, title: '序号',fixed: 'left',templet:'#SerialNumber'}
-                , {field: 'name', title: '歌曲名',}
-                , {field: 'album', title: '唱片集'}
-                , {field: 'artist', title: '歌手'}
-                , {field:'play', title:'操作',templet: '#play', min: true}
-            ]]
-            ,page: true
-            ,response: {
-                statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
-            }
-            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
-                return {
-                    "code": res.code, //解析接口状态
-                    "msg": res.msg, //解析提示文本
-                    "count": res.total, //解析数据长度
-                    "data": res.result.data //解析数据列表
-                };
-            }
-        });
+    table.render({
+        elem: '#musicInfo'
+        ,url:'../../app/open/search?types=search&count=20&source=netease&pages=1&name=别知己'
+        ,toolbar: true
+        ,title: '用户数据表'
+        ,totalRow: true
+        ,cols: [[
+            {field:'SerialNumber', width:80, title: '序号',fixed: 'left',templet:'#SerialNumber'}
+            , {field: 'name', title: '歌曲名',}
+            , {field: 'album', title: '唱片集'}
+            , {field: 'artist', title: '歌手'}
+            , {field:'play', title:'操作',templet: '#play', min: true}
+        ]]
+        ,page: true
+        ,response: {
+            statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+        }
+        ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+            return {
+                "code": res.code, //解析接口状态
+                "msg": res.msg, //解析提示文本
+                "count": res.total, //解析数据长度
+                "data": res.result.data //解析数据列表
+            };
+        }
     });
+});
     
 function getMusic(source,id,pic_id,lyric_id,url_id) {
     var param ={
@@ -61,7 +61,6 @@ function getMusic(source,id,pic_id,lyric_id,url_id) {
         data : param,
         success:function(res){
             if(res.code==200){
-                layer.msg(parent.$("#audioMusic").attr("src"))
                 $("#audioMusic",window.parent.document).attr("src",res.result.url);
                 parent.ONOFF();
             }else{

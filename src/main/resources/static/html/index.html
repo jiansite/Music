@@ -82,8 +82,7 @@
   
   <div class="layui-body">
     <!-- 内容主体区域 -->
-    <div style="padding: 15px;">
-<!--      <iframe id="option" name="option" src="static\html\musicList.html" style="overflow: visible;" scrolling="no" frameborder="no" width="100%" height="100%"></iframe>-->
+    <div style="padding: 15px;width: 100%;height: 100%;">
       <iframe id="option" name="option" src="/static/html/musicList.html" style="overflow: visible;" scrolling="no" frameborder="no" width="100%" height="100%"></iframe>
     </div>
   </div>
@@ -154,51 +153,39 @@ $("#searchBtn").click(function () {
     layer.msg('必选项不能为空', {icon: 5});
     return false;
   }
-    var parms={
-    name:$("#name").val(),
-    types:"search",
-    source: $('#source input[name="source"]:checked ').val(),
-    pages:1,
-    count:20
-  };
-  $.ajax({
-    type : 'post',
-    url : '/app/open/search',
-    timeout : 4000,
-    dataType : 'json',
-    data :parms,
-    success:function(result){
-      data=result;
-      if(result.code==200){
-        layer.msg(result.data);
-        var data=result.result.data;
-        //展示已知数据
-        layui.use('table', function(){
-          var table = layui.table;
-          table.render({
-            elem: '#musicInfo'
-            ,cols: [[ //标题栏
-              {field: 'id', title: 'ID', width: 80, sort: true}
-              ,{field: 'name', title: '歌曲名', width: 120}
-              ,{field: 'album', title: '唱片集', minWidth: 150}
-              ,{field: 'artist', title: '艺术家', minWidth: 160}
-            ]]
-            ,data: [{"id":1,"name":"Jester","album":"人生","artist":"Jester"}]
-            //,skin: 'line' //表格风格
-            ,even: true
-            //,page: true //是否显示分页
-            //,limits: [5, 7, 10]
-            //,limit: 5 //每页默认显示的数量
-          });
-        });
-      }else{
-        layer.msg(result);
-      }
+
+});
+
+layui.use('table', function(){
+  var table = layui.table;
+
+  table.render({
+    elem: '#musicInfo'
+    ,url:'/app/open/search?types=search&count=20&source=netease&pages=1&name=别知己'
+    ,toolbar: true
+    ,title: '用户数据表'
+    ,totalRow: true
+    ,cols: [[
+      {field:'SerialNumber', width:80, title: '序号',fixed: 'left',templet:'#SerialNumber'}
+      , {field: 'name', title: '歌曲名',}
+      , {field: 'album', title: '唱片集'}
+      , {field: 'artist', title: '歌手'}
+      , {field:'play', title:'操作',templet: '#play', min: true}
+    ]]
+    ,page: true
+    ,response: {
+      statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+    }
+    ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+      return {
+        "code": res.code, //解析接口状态
+        "msg": res.msg, //解析提示文本
+        "count": res.total, //解析数据长度
+        "data": res.result.data //解析数据列表
+      };
     }
   });
 });
-
-ONOFF();
 </script>
 </body>
 </html>
