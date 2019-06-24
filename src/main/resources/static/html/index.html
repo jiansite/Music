@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/static/layui/css/layui.css">
   <link rel="shortcut icon" href="/static/img/favicon.ico">
   <script type="text/javascript" src="/static/jquery/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="/static/jquery/play.js"></script>
   <style type="text/css">
     .layui-form-pane .layui-form-radio, .layui-form-pane .layui-form-switch {
       margin-top: 0rem;
@@ -24,7 +25,7 @@
     }
   </style>
   <audio id="music" controls="controls" hidden="hidden"  loop="loop">
-    <source src="http://other.web.nc01.sycdn.kuwo.cn/resource/n1/77/64/3873453051.mp3" type="audio/mpeg"  volumevalue="0.1">
+    <source id="audioMusic" src="http://other.web.nc01.sycdn.kuwo.cn/resource/n1/77/64/3873453051.mp3" type="audio/mpeg"  volumevalue="0.1">
   </audio>
 </head>
 <body class="layui-layout-body">
@@ -36,14 +37,6 @@
       <li class="layui-nav-item"><a href="">正在播放</a></li>
       <li class="layui-nav-item"><a href="">播放列表</a></li>
       <li class="layui-nav-item"><a href="javaScript:search()">歌曲搜索</a></li>
-      <!--<li class="layui-nav-item">
-        <a href="javascript:;">其它系统</a>
-        <dl class="layui-nav-child">
-          <dd><a href="">邮件管理</a></dd>
-          <dd><a href="">消息管理</a></dd>
-          <dd><a href="">授权管理</a></dd>
-        </dl>
-      </li>-->
     </ul>
     <ul class="layui-nav layui-layout-right">
       <li class="layui-nav-item">
@@ -77,9 +70,9 @@
         <li class="layui-nav-item">
           <a href="javascript:;">创建的歌单</a>
           <dl class="layui-nav-child">
-            <dd><a href="javascript:;">列表一</a></dd>
-            <dd><a href="javascript:;">列表二</a></dd>
-            <dd><a href="">列表三</a></dd>
+            <dd><a href="javascript:;">轻音乐</a></dd>
+            <dd><a href="javascript:;">古风</a></dd>
+            <dd><a href="">流行</a></dd>
           </dl>
         </li>
         <li class="layui-nav-item"><a href="">发现音乐</a></li>
@@ -205,17 +198,7 @@ $("#searchBtn").click(function () {
   });
 });
 
-
-
-function ONOFF() {
-  if(music.paused){
-    $("#icon").html("&#xe651;");
-    music.play();
-  }else{
-    $("#icon").html("&#xe652;");
-    music.pause();
-  }
-};
+ONOFF();
 </script>
 </body>
 </html>

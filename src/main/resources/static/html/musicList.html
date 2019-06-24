@@ -4,54 +4,72 @@
     <meta charset="utf-8">
     <title>音乐信息</title>
     <link rel="stylesheet" href="../layui/css/layui.css" media="all">
+    <script type="text/javascript" src="../jquery/jquery-3.4.1.min.js"></script>
 </head>
 <body>
 <table class="layui-hide" id="musicInfo"></table>
 <script src="../layui/layui.js"></script>
-<script>/*
+<script type="text/html" id="SerialNumber">
+    {{d.LAY_TABLE_INDEX+1}}
+</script>
+<script type="text/html" id="play">
+    <i onclick="getMusic('{{d.source}}','{{d.id}}','{{d.pic_id}}','{{d.lyric_id}}','{{d.url_id}}')" class="layui-icon layui-icon-headset" style="font-size: 1.6rem; color: #1E9FFF;"></i>
+</script>
+<script>
     layui.use('table', function(){
         var table = layui.table;
 
-        //第一个实例
         table.render({
-            elem: '#demo'
-            ,height: 312
-            ,url: '/demo/table/user/' //数据接口
-            ,page: true //开启分页
-            ,cols: [[ //表头
-                {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
-                ,{field: 'username', title: '用户名', width:80}
-                ,{field: 'sex', title: '性别', width:80, sort: true}
-                ,{field: 'city', title: '城市', width:80}
-                ,{field: 'sign', title: '签名', width: 177}
-                ,{field: 'experience', title: '积分', width: 80, sort: true}
-                ,{field: 'score', title: '评分', width: 80, sort: true}
-                ,{field: 'classify', title: '职业', width: 80}
-                ,{field: 'wealth', title: '财富', width: 135, sort: true}
+            elem: '#musicInfo'
+            ,url:'../../app/open/search?types=search&count=20&source=netease&pages=1&name=别知己'
+            ,toolbar: true
+            ,title: '用户数据表'
+            ,totalRow: true
+            ,cols: [[
+                {field:'SerialNumber', width:80, title: '序号',fixed: 'left',templet:'#SerialNumber'}
+                , {field: 'name', title: '歌曲名',}
+                , {field: 'album', title: '唱片集'}
+                , {field: 'artist', title: '歌手'}
+                , {field:'play', title:'操作',templet: '#play', min: true}
             ]]
+            ,page: true
+            ,response: {
+                statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+            }
+            ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.total, //解析数据长度
+                    "data": res.result.data //解析数据列表
+                };
+            }
         });
-
-    });*/
-layui.use('table', function () {
-    var table = layui.table;
-
-    //展示已知数据
-    table.render({
-        elem: '#musicInfo'
-        , cols: [[ //标题栏
-            {field: 'id', title: 'ID', width: 80, sort: true}
-            , {field: 'name', title: '歌曲名', width: 120}
-            , {field: 'album', title: '唱片集', minWidth: 150}
-            , {field: 'artist', title: '艺术家', minWidth: 160}
-        ]]
-        , data: [{"id": 1, "name": "Jester", "album": "人生", "artist": "Jester"}]
-        //,skin: 'line' //表格风格
-        , even: true
-        //,page: true //是否显示分页
-        //,limits: [5, 7, 10]
-        //,limit: 5 //每页默认显示的数量
     });
-});
+    
+function getMusic(source,id,pic_id,lyric_id,url_id) {
+    var param ={
+        source:source,
+        id:id,
+        types:"url"
+    };
+    $.ajax({
+        type : 'post',
+        url : '/app/open/detail',
+        timeout : 4000,
+        dataType : 'json',
+        data : param,
+        success:function(res){
+            if(res.code==200){
+                layer.msg(parent.$("#audioMusic").attr("src"))
+                $("#audioMusic",window.parent.document).attr("src",res.result.url);
+                parent.ONOFF();
+            }else{
+                layer.msg(res.msg);
+            }
+        }
+    });
+}
 </script>
 </body>
 </html>
