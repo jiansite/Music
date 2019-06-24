@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="../layui/css/layui.css" media="all">
 </head>
 <body>
-<table class="layui-hide" id="demo"></table>
+<table class="layui-hide" id="musicInfo"></table>
 <script src="../layui/layui.js"></script>
 <script>/*
     layui.use('table', function(){
@@ -32,6 +32,26 @@
         });
 
     });*/
+layui.use('table', function () {
+    var table = layui.table;
+
+    //展示已知数据
+    table.render({
+        elem: '#musicInfo'
+        , cols: [[ //标题栏
+            {field: 'id', title: 'ID', width: 80, sort: true}
+            , {field: 'name', title: '歌曲名', width: 120}
+            , {field: 'album', title: '唱片集', minWidth: 150}
+            , {field: 'artist', title: '艺术家', minWidth: 160}
+        ]]
+        , data: [{"id": 1, "name": "Jester", "album": "人生", "artist": "Jester"}]
+        //,skin: 'line' //表格风格
+        , even: true
+        //,page: true //是否显示分页
+        //,limits: [5, 7, 10]
+        //,limit: 5 //每页默认显示的数量
+    });
+});
 </script>
 </body>
 </html>
