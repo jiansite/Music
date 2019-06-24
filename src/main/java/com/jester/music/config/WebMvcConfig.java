@@ -3,6 +3,7 @@ package com.jester.music.config;
 import com.jester.music.interceptor.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -24,7 +25,11 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/");
+        registry.addViewController("/").setViewName("forward:/html/index.html");
+        registry.addViewController("/index").setViewName("forward:/html/index.html");
+        registry.addViewController("/index.html").setViewName("forward:/html/index.html");
+        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        super.addViewControllers(registry);
     }
 
     /**
@@ -33,10 +38,9 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**")
-                .addResourceLocations("classpath:/static/");
-        registry.addResourceHandler("/templates/**")
-                .addResourceLocations("classpath:/templates/");
+        registry.addResourceHandler("/article/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/templates/**").addResourceLocations("classpath:/templates/");
         super.addResourceHandlers(registry);
     }
 
