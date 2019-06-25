@@ -114,6 +114,13 @@
                     <!-- 生成时是否输出信息 -->
                     <verbose>true</verbose>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.linweiyu</groupId>
+                        <artifactId>ControllerServicePlugin</artifactId>
+                        <version>1.0-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
