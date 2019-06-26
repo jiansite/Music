@@ -83,7 +83,8 @@
   <div class="layui-body">
     <!-- 内容主体区域 -->
     <div style="padding: 15px;width: 100%;height: 100%;">
-      <iframe id="option" name="option" src="../html/musicList.html" style="overflow: visible;" scrolling="no" frameborder="no" width="100%" height="100%"></iframe>
+<!--      <iframe id="option" name="option" src="../html/musicList.html" style="overflow: visible;" scrolling="no" frameborder="no" width="100%" height="100%"></iframe>-->
+      <table class="layui-hide" id="musicInfo"></table>
     </div>
   </div>
   
@@ -118,6 +119,12 @@
 <!--搜索区域结束-->
 
 <script src="/layui/layui.js"></script>
+<script type="text/html" id="SerialNumber">
+  {{d.LAY_TABLE_INDEX+1}}
+</script>
+<script type="text/html" id="play">
+  <i onclick="getMusic('{{d.source}}','{{d.id}}','{{d.pic_id}}','{{d.lyric_id}}','{{d.url_id}}')" class="layui-icon layui-icon-headset" style="font-size: 1.6rem; color: #1E9FFF;"></i>
+</script>
 <script>
 //JavaScript代码区域
 layui.use('element', function(){
@@ -186,6 +193,29 @@ layui.use('table', function(){
     }
   });
 });
+
+function getMusic(source,id,pic_id,lyric_id,url_id) {
+  var param ={
+    source:source,
+    id:id,
+    types:"url"
+  };
+  $.ajax({
+    type : 'post',
+    url : '/app/open/detail',
+    timeout : 4000,
+    dataType : 'json',
+    data : param,
+    success:function(res){
+      if(res.code==200){
+        $("#audioMusic").attr("src",res.result.url);
+        ONOFF();
+      }else{
+        layer.msg(res.msg);
+      }
+    }
+  });
+}
 </script>
 </body>
 </html>
