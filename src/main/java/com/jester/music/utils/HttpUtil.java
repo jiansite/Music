@@ -1,5 +1,7 @@
 package com.jester.music.utils;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.http.Consts;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -411,14 +413,16 @@ public class HttpUtil {
         return result;
     }
 
-    public static String sendGet(String url) throws IOException {
+    public static JSONObject sendGet(String url){
         String result;
         HttpGet httpGet = new HttpGet(url);
         try (CloseableHttpClient httpclient = getBuilder().build();
              CloseableHttpResponse response = httpclient.execute(httpGet)) {
             HttpEntity httpEntity = response.getEntity();
             result = EntityUtils.toString(httpEntity);
+            return JSONObject.parseObject(result);
+        }catch (IOException e){
+            return new JSONObject();
         }
-        return result;
     }
 }

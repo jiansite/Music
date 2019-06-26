@@ -1,37 +1,55 @@
 package com.jester.music.controller;
-import	java.util.HashMap;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPObject;
 import com.jester.music.mode.Music;
 import com.jester.music.utils.HttpUtil;
 import com.jester.music.utils.Result;
-import org.apache.commons.beanutils.BeanMap;
+import com.jester.music.utils.Results;
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.BeanUtilsBean;
+import org.apache.ibatis.reflection.ArrayUtil;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
- * @className: MusicController
- * @description: 获取音乐信息
- * @author: Jester
- * @email: shujian.jiansite@gmail.com
- * @date: 2019-06-23 14:32
- * @version: version 1.0.0
+ * @author Jester
+ * @version version 1.0.0
+ * @className MusicController
+ * @description 获取音乐信息
+ * @email shujian.jiansite@gmail.com
+ * @date 2019-06-23 14:32
  */
 @RestController
 public class MusicController {
     private final static String MUSIC_URL = "https://www.daimadog.com/music/api.php";
+    private final static int V1_ID = 26;
+    private final static String V1_COUNT = "https://v1.itooi.cn/tencent/topList?id=%d&pageSize=9999&page=0&format=1";
+    private final static String V1_MUSIC = "https://v1.itooi.cn/tencent/topList?id=%d&pageSize=%d&page=0&format=1";
+
+    /**
+     * 获取排行榜音乐
+     *
+     * @return
+     */
+    @RequestMapping("/app/open/topList")
+    public Object topList(@RequestParam(name = "pageName", defaultValue = "0") Integer pageName,@RequestParam(name = "limitName", defaultValue = "30") Integer limitName) {
+        JSONArray data = HttpUtil.sendGet(String.format(V1_COUNT, V1_ID)).getJSONArray("data");
+        return Results.success(data,pageName,limitName);
+
+    }
 
     /**
      * 通过歌名获取音乐信息
      * types,count,source,pages,name
+     *
      * @return
      */
     @RequestMapping("/app/open/search")
@@ -39,7 +57,7 @@ public class MusicController {
         try {
             Map<String, String> describe = BeanUtils.describe(music);
             describe.remove("id");
-            String content = HttpUtil.doPost(MUSIC_URL,describe);
+            String content = HttpUtil.doPost(MUSIC_URL, describe);
             JSONArray results = JSONArray.parseArray(content);
             return Result.success(results);
         } catch (Exception e) {
@@ -51,6 +69,7 @@ public class MusicController {
     /**
      * 获取音乐详情
      * types,id,source
+     *
      * @return
      */
     @RequestMapping("/app/open/detail")
@@ -60,7 +79,7 @@ public class MusicController {
             describe.remove("count");
             describe.remove("pages");
             describe.remove("name");
-            String content = HttpUtil.doPost(MUSIC_URL,describe);
+            String content = HttpUtil.doPost(MUSIC_URL, describe);
             JSONObject results = JSONObject.parseObject(content);
             return Result.success(results);
         } catch (Exception e) {
