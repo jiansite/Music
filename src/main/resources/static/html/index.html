@@ -5,13 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>Music</title>
   <link rel="shortcut icon" href="/img/favicon.ico">
-  <link rel="stylesheet" href="/css/index.css">
   <link rel="stylesheet" href="/layui/css/layui.css">
-  <link rel="stylesheet" href="/css/jquery.mCustomScrollbar.min.css">
-  <script type="text/javascript" src="/jquery/play.js"></script>
-  <script type="text/javascript" src="/jquery/music_play.js"></script>
   <script type="text/javascript" src="/jquery/jquery-3.4.1.min.js"></script>
-  <script type="text/javascript" src="/jquery/jquery.mCustomScrollbar.concat.min.js"></script>
   <style type="text/css">
     .layui-form-pane .layui-form-radio, .layui-form-pane .layui-form-switch {
       margin-top: 0rem;
@@ -57,6 +52,11 @@
       height: 100%;
       max-width: 1200px;
       margin: 0 auto;
+    }
+    .layui-layout-admin .layui-body {
+      position: fixed;
+      top: 50px;
+      bottom: 44px;
     }
   </style>
 </head>
@@ -112,74 +112,18 @@
     </div>
   </div>
   
-  <div class="layui-body" style="margin-bottom: 2.6rem; z-index: 1">
+  <div class="layui-body" style="margin-bottom: 2.6rem; z-index: 1;">
     <!-- 内容主体区域 -->
-    <div style="padding: 15px;width: 100%;height: 100%;">
-<!--      <iframe id="option" name="option" src="../html/musicList.html" style="overflow: visible;" scrolling="no" frameborder="no" width="100%" height="100%"></iframe>-->
+    <div style="width: 100%;height: 100%;">
       <table class="layui-hide" id="musicInfo"></table>
     </div>
   </div>
-  
-  <div<!--class="layui-footer"-->>
-    <!--播放器-->
-    <audio id="audio"></audio>
 
-    <!-- 播放器底部区域 -->
-    <div class="footer">
-      <div class="container">
-        <div class="con-btn">
-          <a href="javascript:;" class="player-btn btn-prev" title="上一首"></a>
-          <a href="javascript:;" class="player-btn btn-play" title="播放"></a>
-          <a href="javascript:;" class="player-btn btn-next" title="下一首"></a>
-        </div>
-
-
-        <div class="vol">
-          <div class="quiet">
-            <a href="javascript:;" class="player-btn btn-quiet" title="静音"></a>
-          </div>
-          <div class="volume">
-            <div class="volume-box">
-              <div id="volume-progress" class="mkpgb-area">
-                <div class="mkpgb-bar"></div>
-                <div class="mkpgb-cur"></div>
-                <div class="mkpgb-dot"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="others">
-          <a href="javascript:;" class="player-btn btn-order" title="列表循环"></a>
-          <a href="javascript:;" class="player-btn btn-download" title="下载"></a>
-        </div>
-
-        <div class="progress">
-          <div class="progress_msg">
-            <div class="music_title">自己流動性の花</div>
-            <div class="time_area">
-              <span class="current_time">00:00</span> /
-              <span class="all_time">00:00</span>
-            </div>
-            <div class="clear"></div>
-          </div>
-          <div class="progress-box">
-            <div id="music-progress" class="mkpgb-area">
-              <div class="mkpgb-bar"></div>
-              <div class="mkpgb-cur"></div>
-              <div class="mkpgb-dot"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- 播放器底部区域 -->
+  <div class="footer">
+    <div class="container">
+      <!--放播放器-->
     </div>
-    <!-- 底部固定区域 -->
-    <!--<a href="javaScript:layer.msg('假的,baby ^_^');">© www.jester.com</a>-->
-    <!--<div class="layui-logo" style="margin-left: 80%">
-      <h3>
-        <a href="javaScript:" onclick="ONOFF()" ><i class="layui-icon" style="font-size: 25px; color: green;width:20px; height:20px; " id="icon" >&#xe6fc;</i></a>
-      </h3>
-    </div>-->
   </div>
 </div>
 
@@ -207,7 +151,12 @@
   {{d.LAY_TABLE_INDEX+1}}
 </script>
 <script type="text/html" id="play">
-  <i onclick="getMusic('{{d.url}}')" class="layui-icon layui-icon-headset" style="font-size: 1.6rem; color: #1E9FFF;"></i>
+  <a href="javaScript:">
+    <i onclick="getMusic('{{d.url}}')" class="layui-icon layui-icon-headset" style="font-size: 1.6rem; color: #1E9FFF;"></i>
+  </a>
+  <a href="javaScript:">
+    <i class="layui-icon" style="font-size: 1.6rem; color: #1E9FFF;">&#x21b7;</i>
+  </a>
 </script>
 <script type="text/html" id="pic">
   <img src="{{d.pic}}"/>
@@ -259,7 +208,7 @@ layui.use('table', function(){
     ,toolbar: true
     ,title: '排行榜音乐'
     ,totalRow: true
-    ,where: {pageNum:1,pageSize:30}
+    ,where: {pageNum:0,pageSize:15}
     ,cols: [[
       {field:'SerialNumber', width:80, title: '序号',fixed: 'left',templet:'#SerialNumber'}
       , {field: 'name', title: '歌曲名',}
@@ -268,10 +217,6 @@ layui.use('table', function(){
       , {field:'play', title:'操作',templet: '#play', min: true}
     ]]
     ,page: true
-    ,request: {
-      pageName: 0 //页码的参数名称，默认：page
-      ,limitName: 30 //每页数据量的参数名，默认：limit
-    }
     ,response: {
       statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
     }
@@ -279,8 +224,10 @@ layui.use('table', function(){
 });
 
 function getMusic(url) {
-  $("#audioMusic").attr("src",url);
-  parent.ONOFF();
+  var audio = new Audio();
+  audio.src=url;
+  document.body.appendChild(audio);
+  audio.play();
 }
 </script>
 </body>
