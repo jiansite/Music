@@ -13,7 +13,7 @@
     {{d.LAY_TABLE_INDEX+1}}
 </script>
 <script type="text/html" id="play">
-    <i onclick="getMusic('{{d.source}}','{{d.id}}','{{d.pic_id}}','{{d.lyric_id}}','{{d.url_id}}')" class="layui-icon layui-icon-headset" style="font-size: 1.6rem; color: #1E9FFF;"></i>
+    <i onclick="getMusic('{{d}}')" class="layui-icon layui-icon-headset" style="font-size: 1.6rem; color: #1E9FFF;"></i>
 </script>
 <script>
 layui.use('table', function(){
@@ -47,27 +47,9 @@ layui.use('table', function(){
     });
 });
     
-function getMusic(source,id,pic_id,lyric_id,url_id) {
-    var param ={
-        source:source,
-        id:id,
-        types:"url"
-    };
-    $.ajax({
-        type : 'post',
-        url : '/app/open/detail',
-        timeout : 4000,
-        dataType : 'json',
-        data : param,
-        success:function(res){
-            if(res.code==200){
-                $("#audioMusic",window.parent.document).attr("src",res.result.url);
-                parent.ONOFF();
-            }else{
-                layer.msg(res.msg);
-            }
-        }
-    });
+function getMusic(res) {
+    $("#audioMusic").attr("src",res.url);
+    parent.ONOFF();
 }
 </script>
 </body>

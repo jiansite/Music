@@ -4,10 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>Music</title>
-  <link rel="stylesheet" href="/layui/css/layui.css">
   <link rel="shortcut icon" href="/img/favicon.ico">
-  <script type="text/javascript" src="/jquery/jquery-3.4.1.min.js"></script>
+  <link rel="stylesheet" href="/css/index.css">
+  <link rel="stylesheet" href="/layui/css/layui.css">
+  <link rel="stylesheet" href="/css/jquery.mCustomScrollbar.min.css">
   <script type="text/javascript" src="/jquery/play.js"></script>
+  <script type="text/javascript" src="/jquery/music_play.js"></script>
+  <script type="text/javascript" src="/jquery/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="/jquery/jquery.mCustomScrollbar.concat.min.js"></script>
   <style type="text/css">
     .layui-form-pane .layui-form-radio, .layui-form-pane .layui-form-switch {
       margin-top: 0rem;
@@ -23,10 +27,38 @@
     .layui-input-block {
       min-height: 45px;
     }
+    .layui-table-page .layui-laypage {
+      margin-top: 0.28rem;
+    }
+    .layui-table-page>div {
+      height: 3rem;
+      width: 100%;
+      background-color: #e6e6e6;
+    }
+    .layui-table-page {
+      position: relative;
+      width: 100%;
+      padding: 0rem;
+      height: 41px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .footer {
+      background-color: cadetblue;
+      margin-left: 12.5rem;
+      height: 100px;
+      bottom: 0;
+      width: 100%;
+      position: absolute;
+    }
+    .container {
+      position: relative;
+      width: 96%;
+      height: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
   </style>
-  <audio id="music" controls="controls" hidden="hidden"  loop="loop">
-    <source id="audioMusic" src="http://other.web.nc01.sycdn.kuwo.cn/resource/n1/77/64/3873453051.mp3" type="audio/mpeg"  volumevalue="0.1">
-  </audio>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
@@ -80,7 +112,7 @@
     </div>
   </div>
   
-  <div class="layui-body">
+  <div class="layui-body" style="margin-bottom: 2.6rem; z-index: 1">
     <!-- 内容主体区域 -->
     <div style="padding: 15px;width: 100%;height: 100%;">
 <!--      <iframe id="option" name="option" src="../html/musicList.html" style="overflow: visible;" scrolling="no" frameborder="no" width="100%" height="100%"></iframe>-->
@@ -88,14 +120,66 @@
     </div>
   </div>
   
-  <div class="layui-footer">
+  <div<!--class="layui-footer"-->>
+    <!--播放器-->
+    <audio id="audio"></audio>
+
+    <!-- 播放器底部区域 -->
+    <div class="footer">
+      <div class="container">
+        <div class="con-btn">
+          <a href="javascript:;" class="player-btn btn-prev" title="上一首"></a>
+          <a href="javascript:;" class="player-btn btn-play" title="播放"></a>
+          <a href="javascript:;" class="player-btn btn-next" title="下一首"></a>
+        </div>
+
+
+        <div class="vol">
+          <div class="quiet">
+            <a href="javascript:;" class="player-btn btn-quiet" title="静音"></a>
+          </div>
+          <div class="volume">
+            <div class="volume-box">
+              <div id="volume-progress" class="mkpgb-area">
+                <div class="mkpgb-bar"></div>
+                <div class="mkpgb-cur"></div>
+                <div class="mkpgb-dot"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="others">
+          <a href="javascript:;" class="player-btn btn-order" title="列表循环"></a>
+          <a href="javascript:;" class="player-btn btn-download" title="下载"></a>
+        </div>
+
+        <div class="progress">
+          <div class="progress_msg">
+            <div class="music_title">自己流動性の花</div>
+            <div class="time_area">
+              <span class="current_time">00:00</span> /
+              <span class="all_time">00:00</span>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <div class="progress-box">
+            <div id="music-progress" class="mkpgb-area">
+              <div class="mkpgb-bar"></div>
+              <div class="mkpgb-cur"></div>
+              <div class="mkpgb-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- 底部固定区域 -->
     <!--<a href="javaScript:layer.msg('假的,baby ^_^');">© www.jester.com</a>-->
-    <div class="layui-logo" style="margin-left: 80%">
+    <!--<div class="layui-logo" style="margin-left: 80%">
       <h3>
         <a href="javaScript:" onclick="ONOFF()" ><i class="layui-icon" style="font-size: 25px; color: green;width:20px; height:20px; " id="icon" >&#xe6fc;</i></a>
       </h3>
-    </div>
+    </div>-->
   </div>
 </div>
 
@@ -123,7 +207,7 @@
   {{d.LAY_TABLE_INDEX+1}}
 </script>
 <script type="text/html" id="play">
-  <i onclick="getMusic('{{d.source}}','{{d.id}}','{{d.pic_id}}','{{d.lyric_id}}','{{d.url_id}}')" class="layui-icon layui-icon-headset" style="font-size: 1.6rem; color: #1E9FFF;"></i>
+  <i onclick="getMusic('{{d.url}}')" class="layui-icon layui-icon-headset" style="font-size: 1.6rem; color: #1E9FFF;"></i>
 </script>
 <script type="text/html" id="pic">
   <img src="{{d.pic}}"/>
@@ -194,27 +278,9 @@ layui.use('table', function(){
   });
 });
 
-function getMusic(source,id,pic_id,lyric_id,url_id) {
-  var param ={
-    source:source,
-    id:id,
-    types:"url"
-  };
-  $.ajax({
-    type : 'post',
-    url : '/app/open/detail',
-    timeout : 4000,
-    dataType : 'json',
-    data : param,
-    success:function(res){
-      if(res.code==200){
-        $("#audioMusic").attr("src",res.result.url);
-        ONOFF();
-      }else{
-        layer.msg(res.msg);
-      }
-    }
-  });
+function getMusic(url) {
+  $("#audioMusic").attr("src",url);
+  parent.ONOFF();
 }
 </script>
 </body>
