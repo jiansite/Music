@@ -40,9 +40,10 @@ public class MusicController {
      * @return
      */
     @RequestMapping("/app/open/topList")
-    public Object topList(@RequestParam(name = "pageName", defaultValue = "0") Integer pageName,@RequestParam(name = "limitName", defaultValue = "30") Integer limitName) {
+    public Object topList(/*@RequestParam(name = "pageNum", defaultValue = "0") */Integer pageNum,/*@RequestParam(name = "pageSize", defaultValue = "30") */Integer pageSize) {
+        System.out.println("pageNum = [" + pageNum + "], pageSize = [" + pageSize + "]");
         JSONArray data = HttpUtil.sendGet(String.format(V1_COUNT, V1_ID)).getJSONArray("data");
-        return Results.success(data,pageName,limitName);
+        return Results.success(data,pageNum,pageSize);
 
     }
 
