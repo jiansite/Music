@@ -14,16 +14,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @className: HttpUtil
- * @description: HttpUtil
- * @author: Jester
- * @email: shujian.jiansite@gmail.com
- * @date: 2019-06-23 12:42
- * @version: version 1.0.0
+ *
+ * 登陆拦截
+ *
+ * @author Jester
+ * @email shujian.jiansite@gmail.com
+ * @date 2019-06-23 12:42
+ * @version version 1.0.0
  */
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
-    private static Logger logger = LoggerFactory.getLogger(UserSession.class);
+    private static Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
     @Autowired
     RedisTemplate redisTemplate;
 

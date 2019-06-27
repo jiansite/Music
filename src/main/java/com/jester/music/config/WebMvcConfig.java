@@ -1,6 +1,7 @@
 package com.jester.music.config;
 
 import com.jester.music.interceptor.LoginInterceptor;
+import com.jester.music.interceptor.RequestInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -19,6 +20,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 public class WebMvcConfig extends WebMvcConfigurationSupport {
     @Autowired
     private LoginInterceptor loginInterceptor;
+    @Autowired
+    private RequestInterceptor requestInterceptor;
 
 
     @Override
@@ -46,6 +49,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor).addPathPatterns(loginInterceptor.getPathPatterns()).order(loginInterceptor.getOrder());
+        registry.addInterceptor(requestInterceptor).addPathPatterns(requestInterceptor.getPathPatterns()).order(requestInterceptor.getOrder());
         super.addInterceptors(registry);
     }
 }
