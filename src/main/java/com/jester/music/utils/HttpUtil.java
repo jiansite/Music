@@ -1,6 +1,5 @@
 package com.jester.music.utils;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.http.Consts;
 import org.apache.http.Header;
@@ -34,12 +33,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @className: HttpUtil
- * @description: HttpUtil
- * @author: Jester
- * @email: shujian.jiansite@gmail.com
- * @date: 2019-06-23 12:42
- * @version: version 1.0.0
+ * HttpUtil
+ *
+ * @author Jester
+ * @email shujian.jiansite@gmail.com
+ * @date 2019-06-23 12:42
+ * @version version 1.0.0
  */
 public class HttpUtil {
 
@@ -413,7 +412,7 @@ public class HttpUtil {
         return result;
     }
 
-    public static JSONObject sendGet(String url){
+    public static JSONObject sendGet(String url) {
         String result;
         HttpGet httpGet = new HttpGet(url);
         try (CloseableHttpClient httpclient = getBuilder().build();
@@ -421,7 +420,7 @@ public class HttpUtil {
             HttpEntity httpEntity = response.getEntity();
             result = EntityUtils.toString(httpEntity);
             return JSONObject.parseObject(result);
-        }catch (IOException e){
+        } catch (IOException e) {
             return new JSONObject();
         }
     }

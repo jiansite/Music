@@ -199,7 +199,7 @@ layui.use('table', function(){
       table.reload('testReload', {
         url:"/app/open/search"
         ,page: {
-          curr: 0 //重新从第 1 页开始
+          curr: 1 //重新从第 1 页开始
         }
         ,where: {name:name,source:source}
       }, 'data');

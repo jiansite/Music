@@ -10,12 +10,10 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 /**
- * @className: WebMvcConfig
- * @description: WebMvcConfig
- * @author: Jester
- * @email: shujian.jiansite@gmail.com
- * @date: 2019-06-23 14:16
- * @version: version 1.0.0
+ * @author Jester
+ * @email shujian.jiansite@gmail.com
+ * @date 2019-06-23 14:16
+ * @version version 1.0.0
  */
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurationSupport {
@@ -34,6 +32,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
 
     /**
      * 配置静态资源,避免静态资源请求被拦截
+     *
      * @param registry
      */
     @Override

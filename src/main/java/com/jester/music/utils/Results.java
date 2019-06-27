@@ -68,6 +68,15 @@ public class Results {
 
     }
 
+    public static Object success(Integer count,JSONArray data) {
+        jsonObject.put("code", 200);
+        jsonObject.put("count", count);
+        jsonObject.put("msg", "success");
+        jsonObject.put("data", data);
+        return jsonObject;
+
+    }
+
     public static Object success(String key, Object value) {
         jsonObject.put("code", 200);
         jsonObject.put("msg", "success");
