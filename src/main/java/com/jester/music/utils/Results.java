@@ -41,6 +41,13 @@ public class Results {
     }
 
     public static Object success(JSONArray data, int pageNum, int pageSize) {
+        if (data==null){
+            jsonObject.put("code", 201);
+            jsonObject.put("count", 0);
+            jsonObject.put("msg", "error");
+            jsonObject.put("data", null);
+            return jsonObject;
+        }
         int total = data.size();
         int offset = pageNum * pageSize;
         int limit = pageNum * pageSize + pageSize;

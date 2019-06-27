@@ -33,7 +33,7 @@ public class MusicController {
     private final static int V1_ID = 26;
     private final static String V1_COUNT = "https://v1.itooi.cn/tencent/topList?id=%d&pageSize=9999&page=0&format=1";
     private final static String V1_MUSIC = "https://v1.itooi.cn/tencent/topList?id=%d&pageSize=%d&page=0&format=1";
-    private final static String SEARCH_MUSIC = "https://v1.itooi.cn/%s/search?keyword=%s&type=song&pageSize=20&page=0&format=1";
+    private final static String SEARCH_MUSIC = "https://v1.itooi.cn/%s/search?keyword=%s&type=song&pageSize=9999&page=0&format=1";
 
     /**
      * 获取排行榜音乐
