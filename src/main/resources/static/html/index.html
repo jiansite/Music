@@ -112,7 +112,10 @@
   </a>
 </script>
 <script type="text/html" id="pic">
-  <img src="{{d.pic}}"/>
+  <!--<img src="{{d.pic}}"/>-->
+  <div class="layer-photos-demo" style="cursor:pointer;">
+      <img onclick="show()" layer-src="{{d.pic}}" src="{{d.pic}}" alt="图片名">
+  </div>
 </script>
 <script>
 //JavaScript代码区域
@@ -124,6 +127,14 @@ layui.use('element', function(){
 layui.use('layer', function(){
   var layer = layui.layer;
 });
+
+function show() {
+    layer.photos({
+        photos: '.layer-photos-demo',
+        anim: 5
+    });
+}
+
 
 //页面层-自定义
 function search() {
@@ -162,6 +173,7 @@ layui.use('table', function(){
     ,title: '排行榜音乐'
     ,totalRow: true
     ,where: {pageNum:0,pageSize:15}
+    ,limit: 15
     ,cols: [[
       {field:'SerialNumber', width:80, title: '序号',fixed: 'left',templet:'#SerialNumber'}
       , {field: 'name', title: '歌曲名',}
