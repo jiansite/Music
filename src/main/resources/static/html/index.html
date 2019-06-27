@@ -114,7 +114,7 @@
 <script type="text/html" id="pic">
   <!--<img src="{{d.pic}}"/>-->
   <div class="layer-photos-demo" style="cursor:pointer;">
-      <img onclick="show()" layer-src="{{d.pic}}" src="{{d.pic}}" alt="图片名">
+      <img onclick="show()" layer-src="{{d.pic}}" src="{{d.pic}}" alt="歌曲封面">
   </div>
 </script>
 <script>
@@ -128,6 +128,7 @@ layui.use('layer', function(){
   var layer = layui.layer;
 });
 
+// 查看歌曲封面
 function show() {
     layer.photos({
         photos: '.layer-photos-demo',
@@ -135,8 +136,7 @@ function show() {
     });
 }
 
-
-//页面层-自定义
+//搜索弹窗
 function search() {
   layer.open({
     title: false,
@@ -163,6 +163,9 @@ $("#searchBtn").click(function () {
 
 });
 
+var pageNum=0;
+var pageSize=15;
+
 layui.use('table', function(){
   var table = layui.table;
 
@@ -172,7 +175,7 @@ layui.use('table', function(){
     ,toolbar: true
     ,title: '排行榜音乐'
     ,totalRow: true
-    ,where: {pageNum:0,pageSize:15}
+    ,where: {pageNum:pageNum,pageSize:pageSize}
     ,limit: 15
     ,cols: [[
       {field:'SerialNumber', width:80, title: '序号',fixed: 'left',templet:'#SerialNumber'}
