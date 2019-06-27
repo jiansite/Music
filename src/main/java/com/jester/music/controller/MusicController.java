@@ -33,7 +33,7 @@ public class MusicController {
     private final static int V1_ID = 26;
     private final static String V1_COUNT = "https://v1.itooi.cn/tencent/topList?id=%d&pageSize=9999&page=0&format=1";
     private final static String V1_MUSIC = "https://v1.itooi.cn/tencent/topList?id=%d&pageSize=%d&page=0&format=1";
-    private final static String SEARCH_MUSIC = "https://v1.itooi.cn/%s/search?keyword=%s&type=song&pageSize=9999&page=0&format=1";
+    private final static String SEARCH_MUSIC = "https://v1.itooi.cn/%s/search?keyword=%s&type=song&pageSize=100&page=0&format=1";
 
     /**
      * 获取排行榜音乐
@@ -41,8 +41,7 @@ public class MusicController {
      * @return
      */
     @RequestMapping("/app/open/topList")
-    public Object topList(/*@RequestParam(name = "pageNum", defaultValue = "0") */Integer pageNum,/*@RequestParam(name = "pageSize", defaultValue = "30") */Integer pageSize) {
-        System.out.println("pageNum = [" + pageNum + "], pageSize = [" + pageSize + "]");
+    public Object topList(@RequestParam(name = "page", defaultValue = "0") Integer pageNum,@RequestParam(name = "limit", defaultValue = "30") Integer pageSize) {
         JSONArray data = HttpUtil.sendGet(String.format(V1_COUNT, V1_ID)).getJSONArray("data");
         return Results.success(data,pageNum,pageSize);
 
@@ -54,8 +53,7 @@ public class MusicController {
      * @return
      */
     @RequestMapping("/app/open/search")
-    public Object search(String name,String source,Integer pageNum,Integer pageSize) {
-        System.out.println("pageNum = [" + pageNum + "], pageSize = [" + pageSize + "]");
+    public Object search(String name,String source,@RequestParam(name = "page", defaultValue = "0") Integer pageNum,@RequestParam(name = "limit", defaultValue = "30") Integer pageSize) {
         JSONArray data = HttpUtil.sendGet(String.format(SEARCH_MUSIC,source, name)).getJSONArray("data");
         return Results.success(data,pageNum,pageSize);
 

@@ -164,11 +164,9 @@ $("#searchBtn").click(function () {
 
 });
 
-var pageNum=0;
-var pageSize=15;
-
 layui.use('table', function(){
   var table = layui.table;
+  var laypage = layui.laypage;
 
   table.render({
     elem: '#musicInfo'
@@ -176,7 +174,6 @@ layui.use('table', function(){
     ,toolbar: true
     ,title: '排行榜音乐'
     ,totalRow: true
-    ,where: {pageNum:pageNum,pageSize:pageSize}
     ,limit: 15
     ,cols: [[
       {field:'SerialNumber', width:80, title: '序号',fixed: 'left',templet:'#SerialNumber'}
@@ -203,7 +200,7 @@ layui.use('table', function(){
         ,page: {
           curr: 0 //重新从第 1 页开始
         }
-        ,where: {pageNum:pageNum,pageSize:pageSize,name:name,source:source}
+        ,where: {name:name,source:source}
       }, 'data');
     }
   };
@@ -211,6 +208,13 @@ layui.use('table', function(){
   $('#searchBtn').on('click', function(){
     var type = $(this).data('type');
     active[type] ? active[type].call(this) : '';
+  });
+
+  laypage.render({
+    elem: 'testReload'
+    ,count: 500
+    ,curr: location.hash.replace('#!fenye=', '') //获取起始页
+    ,hash: 'fenye' //自定义hash值
   });
 });
 
