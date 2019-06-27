@@ -175,6 +175,7 @@ layui.use('table', function(){
     ,title: '排行榜音乐'
     ,totalRow: true
     ,limit: 15
+    ,limits: [15, 30, 45, 60]
     ,cols: [[
       {field:'SerialNumber', width:80, title: '序号',fixed: 'left',templet:'#SerialNumber'}
       , {field: 'name', title: '歌曲名',}
@@ -218,11 +219,24 @@ layui.use('table', function(){
   });
 });
 
+// 暂停函数
+function pauseAll(audios) {
+  var self = this;
+  [].forEach.call(audios, function (i) {
+    // 将audios中其他的audio全部暂停
+    i !== self && i.pause();
+  })
+}
 
+var audios = document.getElementsByTagName("audio");
 
 function getMusic(url) {
+  // 获取所有audios
+  audios = document.getElementsByTagName("audio");
+  pauseAll(audios);
+
   var audio = new Audio();
-  audio.src=url;
+  audio.src = url;
   document.body.appendChild(audio);
   audio.play();
 }
@@ -235,12 +249,12 @@ function downloads(url,singer,name) {
     if (this.status === 200) {
       var blob = this.response;// 获取返回值
       var a = document.createElement('a');
-      a.download = "%s - %n.MP3".replace("%s",singer).replace("%n",name);
+      a.download = "%s - %n.mp3".replace("%s",singer).replace("%n",name);
       a.href=window.URL.createObjectURL(blob);
       a.click();
     }
   };
-// 发送ajax请求
+  // 发送ajax请求
   xhr.send();
 }
 </script>
