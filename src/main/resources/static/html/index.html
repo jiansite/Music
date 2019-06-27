@@ -156,7 +156,7 @@
   </a>
   <span style="margin: 0 1rem 0 1rem"></span>
   <a href="javaScript:">
-    <i class="layui-icon layui-icon-download-circle" style="font-size: 1.6rem; color: #1E9FFF;"></i>
+    <i onclick="downloads('{{d.url}}','{{d.singer}}','{{d.name}}')" class="layui-icon layui-icon-download-circle" style="font-size: 1.6rem; color: #1E9FFF;"></i>
   </a>
 </script>
 <script type="text/html" id="pic">
@@ -229,6 +229,23 @@ function getMusic(url) {
   audio.src=url;
   document.body.appendChild(audio);
   audio.play();
+}
+
+function downloads(url,singer,name) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);//get请求，请求地址，是否异步
+  xhr.responseType = "blob";    // 返回类型blob
+  xhr.onload = function () {// 请求完成处理函数
+    if (this.status === 200) {
+      var blob = this.response;// 获取返回值
+      var a = document.createElement('a');
+      a.download = "%s - %n.MP3".replace("%s",singer).replace("%n",name);
+      a.href=window.URL.createObjectURL(blob);
+      a.click();
+    }
+  };
+// 发送ajax请求
+  xhr.send();
 }
 </script>
 </body>
