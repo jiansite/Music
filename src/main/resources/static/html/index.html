@@ -85,7 +85,7 @@
       <div class="layui-input-block" style="margin-left: 1.18rem;float: left; position: relative;">
         <input style="width: 15.6rem;" type="text" id="name" name="name" lay-verify="required" placeholder="搜索歌手、歌名、专辑" autocomplete="off" class="layui-input">
       </div>
-      <button class="layui-btn" lay-submit="" id="searchBtn" data-type="getInfo" style="float: left;">搜索</button>
+      <button class="layui-btn" data-type="reload" id="searchBtn" data-type="getInfo" style="float: left;">搜索</button>
 
     <div class="layui-input-block" style="margin-left: 1.18rem;float: left; position: relative;" id="source">
       <input type="radio" name="source" style="margin: 0rem 0rem" value="netease" title="网易云" checked="">
@@ -121,6 +121,7 @@
 //JavaScript代码区域
 layui.use('element', function(){
   var element = layui.element;
+  var laypage = layui.laypage;
   
 });
 
@@ -188,8 +189,32 @@ layui.use('table', function(){
     ,response: {
       statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
     }
+    ,id: 'testReload'
+  });
+
+  var $ = layui.$, active = {
+    reload: function(){
+      var name = $('#name').val();
+      var source = $('#source input[name="source"]:checked ').val();
+
+      //执行重载
+      table.reload('testReload', {
+        url:"/app/open/search"
+        ,page: {
+          curr: 0 //重新从第 1 页开始
+        }
+        ,where: {pageNum:pageNum,pageSize:pageSize,name:name,source:source}
+      }, 'data');
+    }
+  };
+
+  $('#searchBtn').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
   });
 });
+
+
 
 function getMusic(url) {
   var audio = new Audio();

@@ -33,6 +33,7 @@ public class MusicController {
     private final static int V1_ID = 26;
     private final static String V1_COUNT = "https://v1.itooi.cn/tencent/topList?id=%d&pageSize=9999&page=0&format=1";
     private final static String V1_MUSIC = "https://v1.itooi.cn/tencent/topList?id=%d&pageSize=%d&page=0&format=1";
+    private final static String SEARCH_MUSIC = "https://v1.itooi.cn/%s/search?keyword=%s&type=song&pageSize=20&page=0&format=1";
 
     /**
      * 获取排行榜音乐
@@ -48,44 +49,15 @@ public class MusicController {
     }
 
     /**
-     * 通过歌名获取音乐信息
-     * types,count,source,pages,name
+     * 获取排行榜音乐
      *
      * @return
      */
     @RequestMapping("/app/open/search")
-    public Object search(Music music) {
-        try {
-            Map<String, String> describe = BeanUtils.describe(music);
-            describe.remove("id");
-            String content = HttpUtil.doPost(MUSIC_URL, describe);
-            JSONArray results = JSONArray.parseArray(content);
-            return Result.success(results);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.error();
-        }
-    }
+    public Object search(String name,String source,Integer pageNum,Integer pageSize) {
+        System.out.println("pageNum = [" + pageNum + "], pageSize = [" + pageSize + "]");
+        JSONArray data = HttpUtil.sendGet(String.format(SEARCH_MUSIC,source, name)).getJSONArray("data");
+        return Results.success(data,pageNum,pageSize);
 
-    /**
-     * 获取音乐详情
-     * types,id,source
-     *
-     * @return
-     */
-    @RequestMapping("/app/open/detail")
-    public Object detail(Music music) {
-        try {
-            Map<String, String> describe = BeanUtils.describe(music);
-            describe.remove("count");
-            describe.remove("pages");
-            describe.remove("name");
-            String content = HttpUtil.doPost(MUSIC_URL, describe);
-            JSONObject results = JSONObject.parseObject(content);
-            return Result.success(results);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return Result.error();
-        }
     }
 }
