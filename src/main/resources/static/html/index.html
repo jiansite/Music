@@ -104,7 +104,7 @@
 </script>
 <script type="text/html" id="play">
   <a href="javaScript:">
-    <i onclick="getMusic('{{d.url}}')" class="layui-icon layui-icon-headset" style="font-size: 1.6rem; color: #1E9FFF;"></i>
+    <i onclick="getMusic('{{d.LAY_TABLE_INDEX+1}}')" id="{{d.LAY_TABLE_INDEX+1}}" url="{{d.url}}" class="layui-icon layui-icon-headset" style="font-size: 1.6rem; color: #1E9FFF;"></i>
   </a>
   <span style="margin: 0 1rem 0 1rem"></span>
   <a href="javaScript:">
@@ -230,15 +230,24 @@ function pauseAll(audios) {
 
 var audios = document.getElementsByTagName("audio");
 
-function getMusic(url) {
+function getMusic(id) {
+  var id=+id;
   // 获取所有audios
   audios = document.getElementsByTagName("audio");
   pauseAll(audios);
 
   var audio = new Audio();
-  audio.src = url;
+  var src = $("#%d".replace("%d", id)).attr("url");
+  if (src == undefined || src == "" || src == null) {
+    layer.msg("暂未音乐信息");
+    return false;
+  }
+  audio.src = src;
   document.body.appendChild(audio);
   audio.play();
+  audio.addEventListener("ended", function () {   //当播放完一首歌曲时也会触发
+    getMusic(id + 1);
+  });
 }
 
 function downloads(url,singer,name) {
