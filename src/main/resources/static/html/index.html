@@ -82,8 +82,8 @@
 <!--搜索区域开始-->
 <div style="display: none;margin: 1.16rem auto; " id="search">
   <form id="Info" class="layui-form layui-form-pane" onsubmit='return false'>
-      <div class="layui-input-block" style="margin-left: 1.18rem;float: left; position: relative;">
-        <input style="width: 15.6rem;" type="text" id="name" name="name" lay-verify="required" placeholder="搜索歌手、歌名、专辑" autocomplete="off" class="layui-input">
+      <div class="layui-input-block" style="margin-left: 1.18rem;float: left; width: 20rem; position: relative;">
+        <input style="width: 100%;" type="text" id="name" name="name" lay-verify="required" placeholder="搜索歌手、歌名、专辑" autocomplete="off" class="layui-input">
       </div>
       <button class="layui-btn" data-type="reload" id="searchBtn" data-type="getInfo" style="float: left;">搜索</button>
 
@@ -92,6 +92,7 @@
       <input type="radio" name="source" style="margin: 0rem 0rem" value="tencent" title="QQ">
       <input type="radio" name="source" style="margin: 0rem 0rem" value="migu" title="咪咕">
       <input type="radio" name="source" style="margin: 0rem 0rem" value="kugou" title="酷狗">
+      <input type="radio" name="source" style="margin: 0rem 0rem" value="kuwo" title="酷我">
       <input type="radio" name="source" style="margin: 0rem 0rem" value="baidu" title="百度">
     </div>
   </form>
@@ -142,8 +143,8 @@ function search() {
   layer.open({
     title: false,
     type: 1,
-    area: ['22rem', '6.8rem'],
-    offset:'6rem',
+    area: ['26rem', '6.8rem'],
+    offset:'3.8rem',
     shade:0,
     content: $('#search') //id
   });
@@ -194,6 +195,10 @@ layui.use('table', function(){
     reload: function(){
       var name = $('#name').val();
       var source = $('#source input[name="source"]:checked ').val();
+
+      if (name == "" || name == null) {
+        return false;
+      }
 
       //执行重载
       table.reload('testReload', {

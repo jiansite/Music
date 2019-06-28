@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
  * 获取音乐信息
  *
  * @author Jester
+ * @version version 1.0.0
  * @email shujian.jiansite@gmail.com
  * @date 2019-06-23 14:32
- * @version version 1.0.0
  */
 @RestController
 public class MusicController {
@@ -39,17 +39,15 @@ public class MusicController {
     public Object topList(@RequestParam(name = "page", defaultValue = "0") Integer pageNum, @RequestParam(name = "limit", defaultValue = "30") Integer pageSize) {
         String url = String.format(V1_COUNT, V1_ID);
         String md5 = MD5.get(url);
-        String count_key = ConfigConst.COUNT_KEY+ md5;
-        String data_key = ConfigConst.DATA_KEY+ md5;
-        Boolean hasKey = redisService.hasKey(count_key);
+        String data_key = ConfigConst.DATA_KEY + md5;
+        Boolean hasKey = redisService.hasKey(data_key);
         JSONArray data;
         if (hasKey) {
-            data = JSONArray.parseArray((String)redisService.get(data_key));
+            data = JSONArray.parseArray((String) redisService.get(data_key));
             return Results.success(data, pageNum, pageSize);
         }
         data = HttpUtil.sendGet(url).getJSONArray("data");
         if (data != null) {
-            redisService.set(count_key, String.valueOf(data.size()), ConfigConst.TIME_OUT);
             redisService.set(data_key, JSONArray.toJSONString(data), ConfigConst.TIME_OUT);
         }
         return Results.success(data, pageNum, pageSize);
