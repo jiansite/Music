@@ -1,6 +1,7 @@
 package com.jester.music.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jester.music.interceptor.RequestInterceptor;
 import org.apache.http.Consts;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -18,6 +19,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +44,7 @@ import java.util.Map;
  * @version version 1.0.0
  */
 public class HttpUtil {
+    private static Logger logger = LoggerFactory.getLogger(HttpUtil.class);
 
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36";
 
@@ -413,6 +417,7 @@ public class HttpUtil {
     }
 
     public static JSONObject sendGet(String url) {
+        logger.info("url:"+url);
         String result;
         HttpGet httpGet = new HttpGet(url);
         try (CloseableHttpClient httpclient = getBuilder().build();

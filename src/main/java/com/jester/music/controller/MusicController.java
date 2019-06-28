@@ -38,17 +38,19 @@ public class MusicController {
     @RequestMapping("/app/open/topList")
     public Object topList(@RequestParam(name = "page", defaultValue = "0") Integer pageNum, @RequestParam(name = "limit", defaultValue = "30") Integer pageSize) {
         String url = String.format(V1_COUNT, V1_ID);
-        String key = MD5.get(url);
-        Boolean hasKey = redisService.hasKey(key);
+        String md5 = MD5.get(url);
+        String count_key = ConfigConst.COUNT_KEY+ md5;
+        String data_key = ConfigConst.DATA_KEY+ md5;
+        Boolean hasKey = redisService.hasKey(count_key);
         JSONArray data;
         if (hasKey) {
-            String count = (String) redisService.get(key);
-            data = HttpUtil.sendGet(String.format(V1_MUSIC, V1_ID, pageSize, pageNum)).getJSONArray("data");
-            return Results.success(data == null ? 0 : Integer.valueOf(count), data);
+            data = JSONArray.parseArray((String)redisService.get(data_key));
+            return Results.success(data, pageNum, pageSize);
         }
         data = HttpUtil.sendGet(url).getJSONArray("data");
         if (data != null) {
-            redisService.set(key, String.valueOf(data.size()), ConfigConst.TIME_OUT);
+            redisService.set(count_key, String.valueOf(data.size()), ConfigConst.TIME_OUT);
+            redisService.set(data_key, JSONArray.toJSONString(data), ConfigConst.TIME_OUT);
         }
         return Results.success(data, pageNum, pageSize);
 
