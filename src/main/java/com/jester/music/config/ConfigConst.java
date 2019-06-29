@@ -8,7 +8,7 @@ package com.jester.music.config;
  */
 public class ConfigConst {
     /** 过期时间 */
-    public static long TIME_OUT = 1000 * 60 * 10;
+    public static long TIME_OUT = 60 * 10;
     /** count_key */
     public static String COUNT_KEY = "music:count:";
     /** data_key */

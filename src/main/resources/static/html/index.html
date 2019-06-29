@@ -15,7 +15,7 @@
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
   <div class="layui-header">
-    <div class="layui-logo">Music</div>
+    <div class="layui-logo">自己流動性の花</div>
     <!-- 头部区域（可配合layui已有的水平导航） -->
     <ul class="layui-nav layui-layout-left">
       <li class="layui-nav-item"><a href="javaScript:return false;">正在播放</a></li>
@@ -26,7 +26,7 @@
       <li class="layui-nav-item">
         <a href="javaScript:return false;">
           <img src="/img/Jester.jpg" class="layui-nav-img">
-          <span>Jester</span>
+          <span>ジェスター</span>
         </a>
         <dl class="layui-nav-child">
           <dd><a href="javaScript:return false;">基本资料</a></dd>
@@ -64,18 +64,16 @@
     </div>
   </div>
   
-  <div class="layui-body" style="margin-bottom: 2.6rem; z-index: 1;">
+  <div class="layui-body" style="z-index: 1;">
     <!-- 内容主体区域 -->
     <div style="width: 100%;height: 100%;">
       <table class="layui-hide" id="musicInfo"></table>
     </div>
   </div>
 
-  <!-- 播放器底部区域 -->
-  <div class="footer">
-    <div class="container">
-      <!--放播放器-->
-    </div>
+  <div class="layui-footer" align="center">
+    <!-- 底部固定区域 -->
+    静かに使ってください、撃たないでください。
   </div>
 </div>
 
@@ -104,16 +102,26 @@
   {{d.LAY_TABLE_INDEX+1}}
 </script>
 <script type="text/html" id="play">
-  <a href="javaScript:">
+  <a href="javaScript:" title="播放/暂停">
     <i onclick="getMusic('{{d.LAY_TABLE_INDEX+1}}')" id="{{d.LAY_TABLE_INDEX+1}}" url="{{d.url}}" class="layui-icon layui-icon-play" style="font-size: 1.6rem; color: #1E9FFF;"></i>
   </a>
-  <span style="margin: 0 1rem 0 1rem"></span>
-  <a href="javaScript:">
-    <i onclick="downloads('{{d.url}}','{{d.singer}}','{{d.name}}')" class="layui-icon layui-icon-download-circle" style="font-size: 1.6rem; color: #1E9FFF;"></i>
+</script>
+<script type="text/html" id="music">
+  <a href="javaScript:" title="下载音乐">
+    <i onclick="downloads('{{d.url}}','{{d.singer}}','{{d.name}}','mp3')" class="layui-icon layui-icon-download-circle" style="font-size: 1.6rem; color: #1E9FFF;"></i>
+  </a>
+</script>
+<script type="text/html" id="lrc">
+  <a href="javaScript:" title="下载歌词">
+    <i onclick="downloads('{{d.lrc}}','{{d.singer}}','{{d.name}}','lrc')" class="layui-icon layui-icon-download-circle" style="font-size: 1.6rem; color: #1E9FFF;"></i>
+  </a>
+</script>
+<script type="text/html" id="second">
+  <a href="javaScript:" title="歌曲时间长度">
+    <i class="layui-icon">{{parseInt(d.time/60) < 10 ? "0" + parseInt(d.time/60) : parseInt(d.time/60)}}:{{d.time%60 < 10 ? "0"+d.time%60 : d.time%60}}</i>
   </a>
 </script>
 <script type="text/html" id="pic">
-  <!--<img src="{{d.pic}}"/>-->
   <div class="layer-photos-demo" style="cursor:pointer;">
       <img onclick="show()" layer-src="{{d.pic}}" src="{{d.pic}}">
   </div>
@@ -167,28 +175,30 @@ $("#searchBtn").click(function () {
 
 layui.use('table', function(){
   var table = layui.table;
-  var laypage = layui.laypage;
 
   table.render({
     elem: '#musicInfo'
     ,url:'/app/open/topList'
     ,toolbar: true
     ,title: '排行榜音乐'
-    ,totalRow: true
+    // ,totalRow: true
     ,limit: 15
     ,limits: [15, 30, 45, 60]
     ,cols: [[
-      {field:'SerialNumber', width:80, title: '序号',fixed: 'left',templet:'#SerialNumber'}
+      {field: 'SerialNumber', width: 80, title: '序号', fixed: 'left', templet: '#SerialNumber'}
       , {field: 'name', title: '歌曲名',}
       , {field: 'singer', title: '歌手'}
-      , {field: 'pic', title: '歌曲封面',templet: '#pic', min: true}
-      , {field:'play', title:'操作',templet: '#play', min: true}
+      , {field: 'pic', title: '歌曲封面', templet: '#pic', align: 'center', min: true}
+      , {field: 'second', title: '歌曲时间', templet: '#second', align: 'center', min: true}
+      , {field: 'play', title: '播放/暂停', templet: '#play', align: 'center', min: true}
+      , {field: 'music', title: '下载歌曲', templet: '#music', align: 'center', min: true}
+      , {field: 'lrc', title: '下载歌词', templet: '#lrc', align: 'center', min: true}
     ]]
     ,page: true
     ,response: {
       statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
     }
-    ,id: 'testReload'
+    ,id: 'reload'
   });
 
   var $ = layui.$, active = {
@@ -201,7 +211,7 @@ layui.use('table', function(){
       }
 
       //执行重载
-      table.reload('testReload', {
+      table.reload('reload', {
         url:"/app/open/search"
         ,page: {
           curr: 1 //重新从第 1 页开始
@@ -216,12 +226,12 @@ layui.use('table', function(){
     active[type] ? active[type].call(this) : '';
   });
 
-  laypage.render({
+/*  laypage.render({
     elem: 'testReload'
     ,count: 500
     ,curr: location.hash.replace('#!fenye=', '') //获取起始页
     ,hash: 'fenye' //自定义hash值
-  });
+  });*/
 });
 
 // 暂停函数
@@ -269,6 +279,7 @@ function getMusic(id) {
     return false;
   }
 
+  // audio.src = "%s&quality=flac".replace("%s",src);
   audio.src = src;
   document.body.appendChild(audio);
   playPause(id,true);
@@ -291,15 +302,16 @@ function playPause(id,flag) {
   }
 }
 
-function downloads(url,singer,name) {
+function downloads(url,singer,name,suffix) {
   var xhr = new XMLHttpRequest();
+  // xhr.open('GET', "%s&quality=flac".replace("%s", url), true);//get请求，请求地址，是否异步
   xhr.open('GET', url, true);//get请求，请求地址，是否异步
   xhr.responseType = "blob";    // 返回类型blob
   xhr.onload = function () {// 请求完成处理函数
     if (this.status === 200) {
       var blob = this.response;// 获取返回值
       var a = document.createElement('a');
-      a.download = "%s - %n.mp3".replace("%s",singer).replace("%n",name);
+      a.download = "%s - %n.%u".replace("%s",singer).replace("%n",name).replace("%u",suffix);
       a.href=window.URL.createObjectURL(blob);
       a.click();
     }

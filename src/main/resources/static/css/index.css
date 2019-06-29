@@ -17,34 +17,19 @@
     margin-top: 0.28rem;
 }
 .layui-table-page>div {
-    height: 3rem;
+    height: 100%;
     width: 100%;
     background-color: #e6e6e6;
-}
-.footer {
-    background-color: cadetblue;
-    margin-left: 12.5rem;
-    height: 100px;
-    bottom: 0;
-    width: 100%;
-    position: absolute;
-}
-.container {
-    position: relative;
-    width: 96%;
-    height: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
 }
 .layui-layout-admin .layui-body {
     position: fixed;
     top: 50px;
-    bottom: 44px;
+    bottom: auto;
 }
 .layui-table-page {
     position: relative;
+    padding: 0rem;
     width: 100%;
-    padding: 7px 7px 0;
     height: 41px;
     font-size: 12px;
     white-space: nowrap;
