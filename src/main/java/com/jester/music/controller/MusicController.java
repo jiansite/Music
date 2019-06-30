@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
  * 获取音乐信息
  *
  * @author Jester
- * @version version 1.0.0
  * @email shujian.jiansite@gmail.com
  * @date 2019-06-23 14:32
+ * @version version 1.0.0
  */
 @RestController
 public class MusicController {
