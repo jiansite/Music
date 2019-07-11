@@ -19,7 +19,7 @@ spring:
 
   redis:
     host: 127.0.0.1
-#    password: root
+    password: root
     port: 6379
     timeout: 1000
     lettuce:
@@ -37,6 +37,6 @@ pagehelper:
   params: count=countSql
 
 #日志配置
-logging:
-  file: G:\\log\\music.log
-  level: info
+#logging:
+#  file: G:\\log\\music.log
+#  level.root: info
