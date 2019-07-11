@@ -35,3 +35,8 @@ pagehelper:
   reasonable: true
   support-methods-arguments: true
   params: count=countSql
+
+#日志配置
+logging:
+  file: G:\\log\\music.log
+  level: info
